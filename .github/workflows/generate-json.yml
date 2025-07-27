@@ -28,9 +28,6 @@ jobs:
           npm init -y
           npm install --save-dev js-yaml
 
-      - name: Generate JSON files
-        run: node scripts/generate-json.js
-
       - name: Setup GitHub CLI
         run: |
           gh auth login --with-token <<< "${{ secrets.GITHUB_TOKEN }}"
@@ -50,6 +47,9 @@ jobs:
             echo "Article branch does not exist, creating from main"
             git checkout -b article
           fi
+
+      - name: Generate JSON files
+        run: node scripts/generate-json.js
 
       - name: Commit and push if changed
         run: |
