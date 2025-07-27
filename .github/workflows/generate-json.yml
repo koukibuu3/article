@@ -37,23 +37,16 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
 
-          # Check if article branch exists using gh
-          if gh api repos/:owner/:repo/branches/article --silent 2>/dev/null; then
-            echo "Article branch exists, checking out and rebasing from main"
-            git fetch origin article
-            git checkout -b article origin/article
-            git rebase origin/main
-          else
-            echo "Article branch does not exist, creating from main"
-            git checkout -b article
-          fi
+          # Checkout article branch
+          git fetch origin article
+          git checkout -b article origin/article
 
       - name: Generate JSON files
         run: node scripts/generate-json.js
 
       - name: Commit and push if changed
         run: |
-          git add index.json tags.json
+          git add index.json tags.json Articles/*
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
