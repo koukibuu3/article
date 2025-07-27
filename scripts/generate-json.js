@@ -122,10 +122,34 @@ function generateJsonFiles() {
     lastUpdated: new Date().toISOString()
   };
   
-  // Generate tags.json
+  // Generate tags.json with articles
+  const tagsWithArticles = {};
+  
+  // Group articles by tags
+  articles.forEach(article => {
+    if (article.tags && Array.isArray(article.tags)) {
+      article.tags.forEach(tag => {
+        if (!tagsWithArticles[tag]) {
+          tagsWithArticles[tag] = [];
+        }
+        tagsWithArticles[tag].push({
+          id: article.id,
+          title: article.title,
+          excerpt: article.excerpt,
+          publishedAt: article.publishedAt,
+          path: article.path
+        });
+      });
+    }
+  });
+  
   const tagsData = {
     tags: Object.entries(tagsCount)
-      .map(([name, count]) => ({ name, count }))
+      .map(([name, count]) => ({
+        name,
+        count,
+        articles: tagsWithArticles[name] || []
+      }))
       .sort((a, b) => b.count - a.count), // Sort by count (descending)
     totalTags: Object.keys(tagsCount).length,
     lastUpdated: new Date().toISOString()

@@ -15,6 +15,7 @@
 ### `tags.json`  
 - 使用されているタグの一覧
 - 各タグの使用回数
+- 各タグに紐づく記事の詳細情報（id, title, excerpt, publishedAt, path）
 - 使用回数の多い順にソート
 
 ## 記事の書き方
