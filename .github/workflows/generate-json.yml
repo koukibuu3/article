@@ -31,10 +31,27 @@ jobs:
       - name: Generate JSON files
         run: node scripts/generate-json.js
 
-      - name: Commit and push if changed
+      - name: Setup article branch
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
+
+          # Check if article branch exists
+          if git ls-remote --heads origin article | grep -q article; then
+            echo "Article branch exists, checking out and rebasing from main"
+            git checkout -b article origin/article
+            git rebase origin/main
+          else
+            echo "Article branch does not exist, creating from main"
+            git checkout -b article
+          fi
+
+      - name: Commit and push if changed
+        run: |
           git add index.json tags.json
-          git diff --staged --quiet || git commit -m "Auto-update: Generate index.json and tags.json"
-          git push
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Auto-update: Generate index.json and tags.json"
+            git push origin article
+          fi
