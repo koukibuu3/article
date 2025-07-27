@@ -3,3 +3,10 @@
 !.gitignore
 !Article/
 !Article/**/*
+!.github/
+!.github/**/*
+!scripts/
+!scripts/**/*
+!index.json
+!tags.json
+!README.md
