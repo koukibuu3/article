@@ -31,13 +31,17 @@ jobs:
       - name: Generate JSON files
         run: node scripts/generate-json.js
 
+      - name: Setup GitHub CLI
+        run: |
+          gh auth login --with-token <<< "${{ secrets.GITHUB_TOKEN }}"
+
       - name: Setup article branch
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
 
-          # Check if article branch exists
-          if git ls-remote --heads origin article | grep -q article; then
+          # Check if article branch exists using gh
+          if gh api repos/:owner/:repo/branches/article --silent 2>/dev/null; then
             echo "Article branch exists, checking out and rebasing from main"
             git checkout -b article origin/article
             git rebase origin/main
