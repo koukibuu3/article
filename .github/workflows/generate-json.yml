@@ -43,7 +43,7 @@ jobs:
           # Check if article branch exists using gh
           if gh api repos/:owner/:repo/branches/article --silent 2>/dev/null; then
             echo "Article branch exists, checking out and rebasing from main"
-            git checkout -b article origin/article
+            git checkout article
             git rebase origin/main
           else
             echo "Article branch does not exist, creating from main"
